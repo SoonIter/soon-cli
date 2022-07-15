@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "outDir": "./dist",
+    "declaration": true,
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "isolatedModules": true,
+    "removeComments": true,
+    "downlevelIteration": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": false
+  },
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+  ]
+}

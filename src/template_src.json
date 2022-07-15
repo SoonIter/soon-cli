@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Svelte + Vite + Unocss",
+    "degit": "SoonIter/tampermonkey-svelte-template"
+  },
+  {
+    "name": "React + Vite + Unocss",
+    "degit": "SoonIter/sooniter-react-template"
+  },
+  {
+    "name": "lib + Vitest",
+    "degit": "SoonIter/sooniter-lib-template"
+  },
+  {
+    "name": "lib + Vitest + monorepo",
+    "degit": "SoonIter/sooniter-lib-template-monorepo"
+  }
+]

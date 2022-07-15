@@ -1,0 +1,12 @@
+{
+  "extends": "@antfu",
+  "rules": {
+    "semi": "off",
+    "@typescript-eslint/semi": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "no-console": "off",
+    "eslint-comments/no-unlimited-disable": "off",
+    "import/no-named-as-default": "off",
+    "@typescript-eslint/ban-ts-comment": "off"
+  }
+}
