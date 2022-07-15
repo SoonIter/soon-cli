@@ -8,9 +8,9 @@
     "email": "1730214056@qq.com"
   },
   "license": "MIT",
-  "repository": "https://github.com/SoonIter/sooniter-lib-template",
+  "repository": "https://github.com/SoonIter/soon-cli",
   "bugs": {
-    "url": "https://github.com/SoonIter/sooniter-lib-template/issues"
+    "url": "https://github.com/SoonIter/soon-cli/issues"
   },
   "keywords": [
     "cli"
