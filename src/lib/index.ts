@@ -7,5 +7,5 @@ export { chalk, fs, execa };
 export * from './consts';
 
 export * from './spinner';
-
+export * from './copy/copyDir'
 export * from './logger';

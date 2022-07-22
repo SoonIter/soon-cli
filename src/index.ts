@@ -1,7 +1,7 @@
+#!/usr/bin/env node
 import path from 'path';
 import commander from 'commander';
 import pacote from 'pacote';
-
 import { chalk, error, fs, info } from './lib';
 
 let pkgVersion = '';
@@ -50,7 +50,7 @@ async function start() {
       info(
         `可更新版本，${chalk.green(pkgVersion)} -> ${chalk.green(
           latestVersion,
-        )} \n执行ni -g ${pkgName}`,
+        )} \n执行npm i -g ${pkgName}`,
       );
     }
     process.exitCode = 1;

@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "types": [
+      "vitest/globals"
+    ],
     "target": "ES6",
     "outDir": "./dist",
     "declaration": true,

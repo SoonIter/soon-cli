@@ -1,5 +1,7 @@
-import create from './commands/create'
+import init from './commands/init';
+import template from './commands/template';
+
 const soonConfig = {
-  commands: [create],
-}
+  commands: [init, template],
+};
 export default soonConfig;

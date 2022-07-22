@@ -1,6 +1,6 @@
 {
   "name": "soon-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "packageManager": "pnpm@7.5.0",
   "description": "自用的库模版",
   "author": {
@@ -27,7 +27,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev":"tsup src/index.ts --watch --onSuccess \"npx soon create hello-app\"",
+    "dev": "tsup src/index.ts --watch --onSuccess \"npx soon create hello-app\"",
     "build": "tsup ./src/index.ts",
     "release": "nr prerelease && nr build && npm publish",
     "prerelease": "nr lint:fix && nr test:once",
@@ -58,14 +58,17 @@
     "vitest": "^0.18.0"
   },
   "dependencies": {
+    "@types/inquirer": "^8.2.1",
     "chalk": "^4.1.2",
     "commander": "^8.2.0",
     "execa": "^5.1.1",
-    "fs-extra": "^10.0.0",
+    "fs-extra": "^10.1.0",
     "handlebars": "^4.7.7",
     "inquirer": "^8.2.0",
+    "inquirer-autosubmit-prompt": "^0.2.0",
     "ora": "^5.4.1",
-    "pacote": "^12.0.2"
+    "pacote": "^12.0.2",
+    "progress": "^2.0.3"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"

@@ -1,5 +1,4 @@
 import path from 'path'
-import { fdatasync } from 'fs'
 import inquirer from 'inquirer'
 import {
   chalk,
@@ -11,7 +10,7 @@ import {
   startSpinner,
   succeedSpiner,
   warn,
-} from '../lib'
+} from '../lib/index'
 
 // 检查是否已经存在相同名字工程
 const checkProjectExist = async (targetDir) => {
@@ -87,7 +86,7 @@ const action = async (projectName: string, cmdArgs?: any) => {
 }
 
 export default {
-  command: 'create <project-name>',
+  command: 'init <project-name>',
   description: '创建一个项目',
   optionList: [['--context <context>', '上下文路径']],
   action,
