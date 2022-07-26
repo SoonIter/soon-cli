@@ -17,4 +17,4 @@ or pnpm i -g soon-cli
 
 ### template
 `npx soon template <dir-name>`
-copy './template' to './dir-name'
+copy './template' to './<dir-name>', and replace the '[name]' to <dir-name>
