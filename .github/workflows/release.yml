@@ -1,0 +1,35 @@
+name: release 
+on:
+  push:
+    tags:
+      - 'V*'
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Set node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+          
+      - name: Setup @antfu/ni
+        run: npm i -g @antfu/ni
+
+      - name: Install and Build 
+        run: |
+          nci
+          cd ./packages/main
+          nr build
+
+      - name: Publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public
+          tag: latest
+     
