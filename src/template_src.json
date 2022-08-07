@@ -5,7 +5,7 @@
   },
   {
     "name": "Solid + Vite + Unocss",
-    "degit": "SoonIter/sooniter-lib-template-monorepo"
+    "degit": "SoonIter/solid-vite-unocss-template"
   },
   {
     "name": "Svelte + Vite + Unocss",

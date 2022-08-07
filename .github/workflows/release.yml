@@ -23,7 +23,6 @@ jobs:
       - name: Install and Build 
         run: |
           nci
-          cd ./packages/main
           nr build
 
       - name: Publish
