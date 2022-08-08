@@ -8,6 +8,10 @@
     "degit": "SoonIter/solid-vite-unocss-template"
   },
   {
+    "name": "Solid + Monorepo",
+    "degit": "SoonIter/solid-monorepo-template"
+  },
+  {
     "name": "Svelte + Vite + Unocss",
     "degit": "SoonIter/tampermonkey-svelte-template"
   },

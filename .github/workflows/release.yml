@@ -1,4 +1,4 @@
-name: release 
+name: release
 on:
   push:
     tags:
@@ -16,14 +16,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
-          
+
       - name: Setup @antfu/ni
         run: npm i -g @antfu/ni
 
-      - name: Install and Build 
+      - name: Install and Build
         run: |
           nci
           nr build
+
+      - name: Test
+        run: |
+          nr prerelease
 
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
@@ -31,4 +35,3 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           access: public
           tag: latest
-     
