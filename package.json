@@ -1,6 +1,6 @@
 {
   "name": "soon-cli",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "packageManager": "pnpm@7.5.0",
   "description": "自用的库模版",
   "author": {
@@ -29,8 +29,8 @@
   "scripts": {
     "dev": "tsup src/index.ts --watch --onSuccess \"npx soon create hello-app\"",
     "build": "tsup ./src/index.ts",
-    "release": "nr prerelease && nr build && npm publish",
-    "prerelease": "nr lint:fix && nr test:once",
+    "release": "nr build && bumpp patch && npm publish",
+    "ci": "nr lint:fix && nr test:once",
     "test": "vitest",
     "test:once": "vitest run",
     "test:ui": "vitest --ui",
@@ -45,6 +45,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.25.1",
     "@antfu/ni": "^0.16.3",
+    "bumpp": "^8.2.1",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^18.0.4",
     "@vitest/ui": "^0.15.1",
