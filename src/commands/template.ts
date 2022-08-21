@@ -34,7 +34,10 @@ const action = async (folderName: string, cmdArgs?: any) => {
         if (!yes)
           return false;
       }
-      await replaceDirText('./template', targetDir, { matchText: '[name]', replaceText: folderName });
+      await replaceDirText('./template', targetDir, {
+        matchText: '[name]',
+        replaceText: folderName,
+      });
     }
     else {
       warn(`未找到template,请确认template文件夹 在${currDir}目录下`);

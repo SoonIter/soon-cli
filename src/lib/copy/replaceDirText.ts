@@ -3,8 +3,8 @@ import fs, { existsSync } from 'fs-extra';
 import replaceStream from 'replacestream';
 
 async function replaceFileText(
-  srcPath,
-  tarPath,
+  srcPath: string,
+  tarPath: string,
   options = { matchText: '[name]', replaceText: '[name]' },
 ) {
   const { matchText, replaceText } = options;
@@ -26,8 +26,8 @@ async function replaceFileText(
 }
 
 export async function replaceDirText(
-  srcDir,
-  tarDir,
+  srcDir: string,
+  tarDir: string,
   options = { matchText: '[name]', replaceText: '[name]' },
 ) {
   const isExisted = existsSync(tarDir);
