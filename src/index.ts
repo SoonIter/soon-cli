@@ -23,13 +23,18 @@ const getLatestVersion = async () => {
 };
 
 async function start() {
-  // @ts-expect-error
-  const commandsPath = await (await import('./soon.config.js')).default.commands as unknown as ICommand[]
-  const { program } = commander
+  const { program } = commander;
 
+  // 加载commands从 `./soon.config.t/js`
+  const commandsPath = (await (
+    (
+      await import('./soon.config.js')
+    ).default as any
+  ).commands) as unknown as ICommand[];
   commandsPath.forEach(async (commandObj) => {
     const { command, description, optionList, action } = commandObj;
-    const curp = program.command(command)
+    const curp = program
+      .command(command)
       .description(description)
       .action(action);
 

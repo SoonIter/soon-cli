@@ -22,6 +22,11 @@ replace the `[name]` to `<project-name>`
 `npx soon template <dir-name>`
 copy './template' to './\<dir-name\>', and replace the `[name]` to `<dir-name>`
 
+### glob
+
+`npx soon glob <path>`
+generate 'export \* from \<path\>' to index.ts
+
 ### My Owesome Templates
 
 - [sooniter-lib-template-monorepo](https://github.com/SoonIter/sooniter-lib-template-monorepo) - my template of monorepo project with pnpm and vitest

@@ -27,7 +27,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "dev": "tsup src/index.ts --watch --onSuccess \"npx soon create hello-app\"",
+    "dev": "tsup src/index.ts --watch",
     "build": "tsup ./src/index.ts",
     "release": "nr build && npx bumpp patch --commit '🔖v' && npm publish",
     "ci": "nr lint:fix && nr test:once",

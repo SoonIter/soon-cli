@@ -10,10 +10,8 @@ import {
   info,
   startSpinner,
   succeedSpiner,
-  success,
   warn,
 } from '../lib/index';
-import { replaceDirText } from '../lib/copy/replaceDirText';
 
 // 检查是否已经存在相同名字工程
 const checkProjectExist = async (targetDir) => {
@@ -91,7 +89,7 @@ const action = async (projectName: string, cmdArgs?: any) => {
       `项目创建完成 ${chalk.yellow(projectName)}\n👉 输入以下命令开始使用:`,
     );
 
-    info('$ ni or pnpm install\n');
+    info(`$ cd ./${projectName} \n$ ni or pnpm install\n`);
   }
   catch (err) {
     const e = err as Error;
