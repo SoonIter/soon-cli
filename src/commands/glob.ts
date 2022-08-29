@@ -1,9 +1,10 @@
-import path from 'path';
 import fg from 'fast-glob';
-import { cwd, failSpinner, fs, startSpinner, succeedSpiner } from '../lib';
+import { program } from 'commander';
+import { failSpinner, fs, succeedSpiner } from '../lib';
 
-const exec = async (pathArg: string, cmdArgs?: any) => {
-  const entries = await fg([pathArg]);
+const exec = async (pathArg: string | string[], cmdArgs?: any) => {
+  const pathArgs = typeof pathArg === 'string' ? [pathArg] : pathArg;
+  const entries = await fg(pathArgs);
   const exportsArr = entries.reduce((arr, pathItem) => {
     arr.push(`export * from '${pathItem.replace(/\.ts$/, '')}';`);
     return arr;
@@ -19,10 +20,10 @@ const exec = async (pathArg: string, cmdArgs?: any) => {
     },
   );
 };
-const action = (pathArg: string, cmdArgs: any) => {
+const action = (pathArg0: string, cmdArgs: any) => {
+  const pathArgs = program.args.filter(s => s !== 'glob').map(s => s.replace('"', ''))
   try {
-    const targetDir = pathArg.replace('"', '');
-    exec(targetDir);
+    exec(pathArgs);
     succeedSpiner('创建index.ts成功');
   }
   catch (err) {
@@ -33,8 +34,8 @@ const action = (pathArg: string, cmdArgs: any) => {
 };
 
 export default {
-  command: 'glob <path>',
-  description: '自动生成 export * from <path>',
+  command: 'glob [path1] [path2]',
+  description: '自动生成 export * from [path]',
   // optionList: [['--context <context>', '上下文路径']],
   action,
 } as ICommand;
