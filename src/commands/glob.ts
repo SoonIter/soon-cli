@@ -6,7 +6,7 @@ const exec = async (pathArg: string | string[], cmdArgs?: any) => {
   const pathArgs = typeof pathArg === 'string' ? [pathArg] : pathArg;
   const entries = await fg(pathArgs, { dot: true });
   const exportsArr = entries.reduce((arr, pathItem) => {
-    arr.push(`export * from '${pathItem.replace(/\.ts$/, '')}';`);
+    arr.push(`export * from '${pathItem.replace(/\.tsx?$/, '')}';`);
     return arr;
   }, [] as string[]);
   fs.writeFile(
