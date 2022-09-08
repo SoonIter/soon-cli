@@ -1,6 +1,7 @@
 import path from 'path';
 import inquirer from 'inquirer';
 import replaceStringInFiles from 'tiny-replace-files';
+import soonConfig from '../soon.config';
 import {
   chalk,
   cwd,
@@ -32,10 +33,11 @@ const checkProjectExist = async (targetDir) => {
   }
   return false;
 };
-let _templates = [] as ITemplate[];
+
+let _templates = soonConfig?.templates ?? ([] as ITemplate[]);
+
 const getQuestions = async (projectName = 'my-new-app') => {
-  // @ts-expect-error
-  const templates = (await import('../template_src.json')) as ITemplate[];
+  const templates = soonConfig.templates;
   _templates = templates;
   return await inquirer.prompt([
     {
@@ -48,7 +50,7 @@ const getQuestions = async (projectName = 'my-new-app') => {
       type: 'list',
       name: 'projectType',
       message: '请选择项目模版',
-      choices: templates.map(i => i.name),
+      choices: templates.map(i => getSpecialText(i.name)),
       data: templates.map(i => i.degit),
     },
   ]);
@@ -61,7 +63,7 @@ const cloneProject = async (targetDir, projectName, projectInfo) => {
   await execa('npx', ['degit', degitUrl, projectName]);
 };
 
-const action = async (projectName: string, cmdArgs?: any) => {
+const action = async (projectName = 'my-new-app', cmdArgs?: any) => {
   try {
     // 获取项目路径
     const targetDir = path.join(
@@ -78,6 +80,7 @@ const action = async (projectName: string, cmdArgs?: any) => {
 
     // clone仓库
     await cloneProject(targetDir, projectName, projectInfo);
+
     // 替换[name]
     const options = {
       files: `${targetDir}/**/*`,
@@ -98,8 +101,30 @@ const action = async (projectName: string, cmdArgs?: any) => {
 };
 
 export default {
-  command: 'init <project-name>',
+  command: 'init [project-name]',
   description: '创建一个项目',
   optionList: [['--context <context>', '上下文路径']],
   action,
 } as ICommand;
+
+function getSpecialText(templateName: string) {
+  const m = [
+    ...soonConfig.templateColor,
+    [/solid/i, chalk.hex('#4d71b3').bold],
+    [/react/i, chalk.hex('#82d7f7').bold],
+    [/svelte/i, chalk.hex('#eb5027').bold],
+    [/vue/i, chalk.hex('#65b687').bold],
+    [/vitest/i, chalk.hex('#7b9a36').bold],
+    [/vite/i, chalk.hex('#8e68f6').bold],
+    [/unocss/i, chalk.hex('#9a9a9a').bold],
+  ] as const;
+  const transformColor
+    = m.find(([reg]) => reg.test(templateName))?.[1] ?? ((str: string) => str);
+  // let name = templateName;
+  // console.log('---------', name);
+  // m.forEach(([reg, fn]) => {
+  //   name = name.replace(reg, sub => fn(sub));
+  //   console.log(name);
+  // });
+  return transformColor(templateName);
+}

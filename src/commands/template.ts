@@ -2,15 +2,7 @@ import path from 'path';
 import { existsSync } from 'fs-extra';
 import inquirer from 'inquirer';
 import { replaceDirText } from '../lib/copy/replaceDirText';
-import {
-  copyDir,
-  cwd,
-  failSpinner,
-  fs,
-  startSpinner,
-  succeedSpiner,
-  warn,
-} from '../lib/index';
+import { cwd, failSpinner, fs, startSpinner, warn } from '../lib/index';
 
 const action = async (folderName: string, cmdArgs?: any) => {
   try {
@@ -19,9 +11,6 @@ const action = async (folderName: string, cmdArgs?: any) => {
     const targetDir = path.join(currDir, folderName);
     startSpinner('正在复制');
     if (fs.existsSync('./template')) {
-      // copyDir('./template', targetDir).then(() => {
-      //   succeedSpiner('复制成功');
-      // });
       const isExisted = existsSync(targetDir);
       if (isExisted) {
         const { yes } = await inquirer.prompt([

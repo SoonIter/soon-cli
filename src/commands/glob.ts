@@ -4,7 +4,7 @@ import { failSpinner, fs, succeedSpiner } from '../lib';
 
 const exec = async (pathArg: string | string[], cmdArgs?: any) => {
   const pathArgs = typeof pathArg === 'string' ? [pathArg] : pathArg;
-  const entries = await fg(pathArgs);
+  const entries = await fg(pathArgs, { dot: true });
   const exportsArr = entries.reduce((arr, pathItem) => {
     arr.push(`export * from '${pathItem.replace(/\.ts$/, '')}';`);
     return arr;
@@ -21,7 +21,9 @@ const exec = async (pathArg: string | string[], cmdArgs?: any) => {
   );
 };
 const action = (pathArg0: string, cmdArgs: any) => {
-  const pathArgs = program.args.filter(s => s !== 'glob').map(s => s.replace('"', ''))
+  const pathArgs = program.args
+    .filter(s => s !== 'glob')
+    .map(s => s.replace('"', ''));
   try {
     exec(pathArgs);
     succeedSpiner('创建index.ts成功');
@@ -36,6 +38,5 @@ const action = (pathArg0: string, cmdArgs: any) => {
 export default {
   command: 'glob [path1] [path2]',
   description: '自动生成 export * from [path]',
-  // optionList: [['--context <context>', '上下文路径']],
   action,
 } as ICommand;

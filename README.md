@@ -20,12 +20,16 @@ replace the `[name]` to `<project-name>`
 ### template
 
 `npx soon template <dir-name>`
+
 copy './template' to './\<dir-name\>', and replace the `[name]` to `<dir-name>`
 
 ### glob
 
 `npx soon glob <path>`
+
 generate 'export \* from \<path\>' to index.ts
+
+e.g: When build your hooks  `soon glob ./use*/index.{ts,tsx} ./create*/index.{ts,tsx}`
 
 ### My Owesome Templates
 
