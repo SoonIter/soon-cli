@@ -38,7 +38,18 @@ let _templates = soonConfig?.templates ?? ([] as ITemplate[]);
 
 const getQuestions = async (projectName = 'my-new-app') => {
   const templates = soonConfig.templates;
-  _templates = templates;
+  _templates = templates.map(({ degit, name }) => {
+    // degit github:user/repo
+    // degit git@github.com:user/repo
+    // degit https://github.com/user/repo
+    // degit user/repo#dev       # branch
+    // degit user/repo#v1.2.3    # release tag
+    // degit user/repo#1234abcd  # commit hash
+    return {
+      degit: degit.startsWith('http') ? degit : `github:${degit}`,
+      name,
+    };
+  });
   return await inquirer.prompt([
     {
       type: 'input',
@@ -58,8 +69,10 @@ const getQuestions = async (projectName = 'my-new-app') => {
 
 const cloneProject = async (targetDir, projectName, projectInfo) => {
   startSpinner(`正在创建项目 ${chalk.cyan(targetDir)}`);
+  // TODO: 这里上颜色的形式不太好，容易出bug
   const degitUrl
-    = _templates.find(i => i.name === projectInfo.projectType)?.degit ?? 'none';
+    = _templates.find(i => projectInfo.projectType.includes(i.name))?.degit
+    ?? 'none';
   await execa('npx', ['degit', degitUrl, projectName]);
 };
 
@@ -75,7 +88,7 @@ const action = async (projectName = 'my-new-app', cmdArgs?: any) => {
       return;
     }
 
-    // { name: 'hello', projectType: 'Solid + Monorepo' }
+    // { name: 'hello', projectType: '\x1B[38;2;130;215;247m\x1B[1Solid + Monorepo\x1B[22m\x1B[39m' }
     const projectInfo = await getQuestions(projectName);
 
     // clone仓库
