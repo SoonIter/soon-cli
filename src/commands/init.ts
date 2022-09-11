@@ -64,7 +64,7 @@ const getQuestions = async (projectName = 'my-new-app') => {
       choices: templates.map(i => getSpecialText(i.name)),
       data: templates.map(i => i.degit),
     },
-  ]);
+  ]) as { name: string; projectType: string };
 };
 
 const cloneProject = async (targetDir, projectName, projectInfo) => {
@@ -78,6 +78,10 @@ const cloneProject = async (targetDir, projectName, projectInfo) => {
 
 const action = async (projectName = 'my-new-app', cmdArgs?: any) => {
   try {
+    // { name: 'hello', projectType: '\x1B[38;2;130;215;247m\x1B[1Solid + Monorepo\x1B[22m\x1B[39m' }
+    const projectInfo = await getQuestions(projectName);
+    projectName = projectInfo.name ?? projectName;
+
     // 获取项目路径
     const targetDir = path.join(
       (cmdArgs && cmdArgs.context) || cwd,
@@ -87,9 +91,6 @@ const action = async (projectName = 'my-new-app', cmdArgs?: any) => {
       warn('此路径已存在');
       return;
     }
-
-    // { name: 'hello', projectType: '\x1B[38;2;130;215;247m\x1B[1Solid + Monorepo\x1B[22m\x1B[39m' }
-    const projectInfo = await getQuestions(projectName);
 
     // clone仓库
     await cloneProject(targetDir, projectName, projectInfo);
