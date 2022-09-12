@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import glob from './commands/glob';
 import init from './commands/init';
 import template from './commands/template';
@@ -20,7 +19,7 @@ const soonConfig = {
     },
     {
       name: 'Vitesse + Vue',
-      degit: 'antfu/vitesse',
+      degit: 'SoonIter/vitesse',
     },
     {
       name: 'Svelte + Vite + Unocss',
