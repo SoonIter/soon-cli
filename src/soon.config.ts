@@ -19,6 +19,10 @@ const soonConfig = {
       degit: 'SoonIter/solid-monorepo-template',
     },
     {
+      name: 'Vitesse + Vue',
+      degit: 'antfu/vitesse',
+    },
+    {
       name: 'Svelte + Vite + Unocss',
       degit: 'SoonIter/tampermonkey-svelte-template',
     },
