@@ -134,11 +134,5 @@ function getSpecialText(templateName: string) {
   ] as const;
   const transformColor
     = m.find(([reg]) => reg.test(templateName))?.[1] ?? ((str: string) => str);
-  // let name = templateName;
-  // console.log('---------', name);
-  // m.forEach(([reg, fn]) => {
-  //   name = name.replace(reg, sub => fn(sub));
-  //   console.log(name);
-  // });
   return transformColor(templateName);
 }

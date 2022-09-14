@@ -22,6 +22,10 @@ const soonConfig = {
       degit: 'SoonIter/vitesse',
     },
     {
+      name: 'Vitesse-lite + Vue',
+      degit: 'antfu/vitesse-lite',
+    },
+    {
       name: 'Svelte + Vite + Unocss',
       degit: 'SoonIter/tampermonkey-svelte-template',
     },
