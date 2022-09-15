@@ -25,10 +25,6 @@ jobs:
           nci
           nr build
 
-      - name: Test
-        run: |
-          nr prerelease
-
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
