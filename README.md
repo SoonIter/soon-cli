@@ -24,6 +24,8 @@ replace the `[name]` to `<project-name>`
 `npx soon template <dir-name>`
 
 copy './template' to './\<dir-name\>', and replace the `[name]` to `<dir-name>`
+![template preview](https://raw.githubusercontent.com/SoonIter/soon-cli/master/docs/template.png)
+
 
 ![template preview](https://raw.githubusercontent.com/SoonIter/soon-cli/master/docs/template.png)
 
