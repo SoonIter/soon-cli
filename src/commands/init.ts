@@ -50,7 +50,7 @@ const getQuestions = async (projectName = 'my-new-app') => {
       name,
     };
   });
-  return await inquirer.prompt([
+  return (await inquirer.prompt([
     {
       type: 'input',
       name: 'name',
@@ -64,15 +64,17 @@ const getQuestions = async (projectName = 'my-new-app') => {
       choices: templates.map(i => getSpecialText(i.name)),
       data: templates.map(i => i.degit),
     },
-  ]) as { name: string; projectType: string };
+  ])) as { name: string; projectType: string };
 };
 
 const cloneProject = async (targetDir, projectName, projectInfo) => {
   startSpinner(`正在创建项目 ${chalk.cyan(targetDir)}`);
   // TODO: 这里上颜色的形式不太好，容易出bug
   const degitUrl
-    = _templates.find(i => projectInfo.projectType.includes(i.name))?.degit
-    ?? 'none';
+    = _templates
+      .slice()
+      .sort((a, b) => -a.name.length + b.name.length)
+      .find(i => projectInfo.projectType.includes(i.name))?.degit ?? 'none';
   await execa('npx', ['degit', degitUrl, projectName]);
 };
 
