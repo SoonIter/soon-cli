@@ -17,11 +17,15 @@
 `npx soon init <project-name>`.
 replace the `[name]` to `<project-name>`
 
+![init preview](https://raw.githubusercontent.com/SoonIter/soon-cli/master/docs/init.png)
+
 ### template
 
 `npx soon template <dir-name>`
 
 copy './template' to './\<dir-name\>', and replace the `[name]` to `<dir-name>`
+![template preview](https://raw.githubusercontent.com/SoonIter/soon-cli/master/docs/template.png)
+
 
 ### glob
 
@@ -30,6 +34,18 @@ copy './template' to './\<dir-name\>', and replace the `[name]` to `<dir-name>`
 generate 'export \* from \<path\>' to index.ts
 
 e.g: When build your hooks  `soon glob ./use*/index.{ts,tsx} ./create*/index.{ts,tsx}`
+
+```typescript
+export * from './useBoolean/index';
+export * from './useCounter/index';
+export * from './useEventListener/index';
+export * from './useLocalStorage/index';
+export * from './useModelValue/index';
+export * from './useMouse/index';
+export * from './useTitle/index';
+export * from './useToggle/index';
+export * from './createMotionTransform/index';
+```
 
 ### My Owesome Templates
 
