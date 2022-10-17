@@ -133,6 +133,7 @@ function getSpecialText(templateName: string) {
     [/vitest/i, chalk.hex('#7b9a36').bold],
     [/vite/i, chalk.hex('#8e68f6').bold],
     [/unocss/i, chalk.hex('#9a9a9a').bold],
+    [/vscode/i, chalk.hex('#4f88ea').bold],
   ] as const;
   const transformColor
     = m.find(([reg]) => reg.test(templateName))?.[1] ?? ((str: string) => str);

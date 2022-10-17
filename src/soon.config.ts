@@ -36,9 +36,14 @@ const soonConfig = {
     {
       name: 'lib + Vitest + monorepo',
       degit: 'SoonIter/sooniter-lib-template-monorepo',
-    }, {
+    },
+    {
       name: 'unplugin-starter - Vite',
       degit: 'antfu/unplugin-starter',
+    },
+    {
+      name: 'vscode-starter',
+      degit: 'antfu/starter-vscode',
     },
   ],
   templateColor: [] as const,
