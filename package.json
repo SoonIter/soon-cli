@@ -27,6 +27,7 @@
     "LICENSE"
   ],
   "scripts": {
+    "prepare": "simple-git-hooks",
     "dev": "tsup src/index.ts --watch",
     "build": "tsup ./src/index.ts",
     "release": "nr build && npx bumpp patch --commit '🔖v' && npm publish",
@@ -45,6 +46,8 @@
   "devDependencies": {
     "@antfu/eslint-config": "^0.25.1",
     "@antfu/ni": "^0.16.3",
+    "@commitlint/cli": "^17.3.0",
+    "@commitlint/config-conventional": "^17.3.0",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^18.0.4",
     "@vitest/ui": "^0.15.1",
@@ -75,7 +78,8 @@
     "tiny-replace-files": "^1.0.2"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "pre-commit": "npx lint-staged",
+    "commit-msg": "npx commitlint -e $HUSKY_GIT_PARAMS"
   },
   "lint-staged": {
     "*.{js,ts,tsx,vue,md}": [

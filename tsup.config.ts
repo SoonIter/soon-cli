@@ -1,6 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-  minify: true,
+  minify: false,
   format: ['cjs'],
+  sourcemap: 'inline',
 });
