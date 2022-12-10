@@ -48,6 +48,14 @@ export * from './useToggle/index';
 export * from './createMotionTransform/index';
 ```
 
+### githook
+
+config the githook in one click
+
+· `pnpm install -D simple-git-hooks lint-staged @commitlint/cli @commitlint/config-conventional`
+· generate `.commitlintrc`
+· add `prepare` script and "simple-git-hooks" and "lint-staged" to `package.json`
+
 ### My Owesome Templates
 
 - [sooniter-lib-template-monorepo](https://github.com/SoonIter/sooniter-lib-template-monorepo) - my template of monorepo project with pnpm and vitest

@@ -44,7 +44,9 @@ const action = async () => {
     if (haveCommitlint.length === 0)
       fs.writeFileSync('.commitlintrc', 'module.exports = { extends: [\'@commitlint/config-conventional\'] };');
 
-    execSync(`pnpm install -D ${dependencies.join(' ')}`, { stdio: 'inherit' });
+    const commandRunning = `pnpm install -D ${dependencies.join(' ')}`;
+    console.log(chalk.yellow(commandRunning))
+    execSync(commandRunning, { stdio: 'inherit' });
 
     success('添加完成');
   }
