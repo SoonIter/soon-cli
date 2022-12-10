@@ -1,8 +1,8 @@
 import path from 'path';
-import { existsSync } from 'fs-extra';
 import inquirer from 'inquirer';
 import { replaceDirText } from '../lib/copy/replaceDirText';
 import { cwd, failSpinner, fs, startSpinner, warn } from '../lib/index';
+const { existsSync } = fs;
 
 const action = async (folderName: string, cmdArgs?: any) => {
   try {

@@ -1,8 +1,12 @@
 #!/usr/bin/env node
-import path from 'path';
-import commander from 'commander';
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'node:url'
+import { program } from 'commander';
 import pacote from 'pacote';
 import { chalk, error, fs, info } from './lib';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 let pkgVersion = '';
 let pkgName = '';
@@ -23,8 +27,6 @@ const getLatestVersion = async () => {
 };
 
 async function start() {
-  const { program } = commander;
-
   // 加载commands从 `./soon.config.t/js`
   const commandsPath = (await (
     (

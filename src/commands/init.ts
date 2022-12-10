@@ -15,7 +15,7 @@ import {
 } from '../lib/index';
 
 // 检查是否已经存在相同名字工程
-const checkProjectExist = async (targetDir) => {
+const checkProjectExist = async (targetDir: string) => {
   if (fs.existsSync(targetDir)) {
     const answer = await inquirer.prompt({
       type: 'list',
@@ -124,6 +124,7 @@ export default {
 } as ICommand;
 
 function getSpecialText(templateName: string) {
+  // 根据项目上色
   const m = [
     ...soonConfig.templateColor,
     [/solid/i, chalk.hex('#4d71b3').bold],

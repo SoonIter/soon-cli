@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import fs from 'fs-extra';
-import execa from 'execa';
+import { execa } from 'execa';
 
 export { chalk, fs, execa };
 

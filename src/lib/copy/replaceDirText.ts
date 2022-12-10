@@ -1,6 +1,7 @@
 import path from 'path';
-import fs, { existsSync } from 'fs-extra';
+import fs from 'fs-extra';
 import replaceStream from 'replacestream';
+const { existsSync } = fs;
 
 async function replaceFileText(
   srcPath: string,

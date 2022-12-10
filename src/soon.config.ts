@@ -1,9 +1,10 @@
 import glob from './commands/glob';
 import init from './commands/init';
 import template from './commands/template';
+import githook from './commands/githook';
 
 const soonConfig = {
-  commands: [init, template, glob],
+  commands: [init, template, glob, githook],
   templates: [
     {
       name: 'React + Vite + Unocss',

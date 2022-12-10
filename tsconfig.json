@@ -3,12 +3,14 @@
     "types": [
       "vitest/globals"
     ],
-    "target": "ES6",
+    
+    "declarationDir": "./dist",
+    "target": "ESNext",
     "outDir": "./dist",
     "declaration": true,
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Node",
     "lib": [
       "DOM",
       "DOM.Iterable",

@@ -1,10 +1,9 @@
 import { existsSync } from 'fs';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
-import { success } from '..';
 
 // 复制文件夹所有
-async function copyDir(srcDir, tarDir) {
+async function copyDir(srcDir: string, tarDir: string) {
   const isExisted = existsSync(tarDir);
   if (isExisted) {
     const { yes } = await inquirer.prompt([
