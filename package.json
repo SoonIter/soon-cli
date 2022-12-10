@@ -1,6 +1,6 @@
 {
   "name": "soon-cli",
-  "version": "1.1.19",
+  "version": "1.1.21",
   "packageManager": "pnpm@7.5.0",
   "description": "自用的库模版",
   "author": {
@@ -47,7 +47,7 @@
     "prepare": "simple-git-hooks",
     "dev": "tsup src/index.ts --watch",
     "build": "tsup ./src/index.ts",
-    "release": "nr build && npx bumpp patch --commit '🔖v' && npm publish",
+    "release": "nr build && npx bumpp patch --commit 'build: 🔖v' && npm publish",
     "ci": "nr lint:fix && nr test:once",
     "test": "vitest",
     "test:once": "vitest run",
