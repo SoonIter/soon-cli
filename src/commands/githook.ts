@@ -42,9 +42,9 @@ const action = async () => {
 
     const haveCommitlint = await fg('./*commitlint*');
     if (haveCommitlint.length === 0)
-      fs.writeFileSync('.commitlintrc', 'module.exports = { extends: [\'@commitlint/config-conventional\'] };');
+      fs.writeFileSync('.commitlintrc', '{ extends: [\'@commitlint/config-conventional\'] };');
 
-    const commandRunning = `pnpm install -D ${dependencies.join(' ')}`;
+    const commandRunning = `pnpm install -Dw ${dependencies.join(' ')}`;
     console.log(chalk.yellow(commandRunning))
     execSync(commandRunning, { stdio: 'inherit' });
 
@@ -56,7 +56,7 @@ const action = async () => {
 }
 
 export default {
-  command: 'githook [dir-name]',
+  command: 'githook',
   description: '自动配置simple-git-hooks',
   optionList: [['--context <context>', '上下文路径']],
   action,

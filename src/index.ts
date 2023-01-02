@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'node:url'
+import { createRequire } from 'module';
 import { program } from 'commander';
 import pacote from 'pacote';
-import { chalk, error, fs, info } from './lib';
+import { chalk, debug, error, fs, info } from './lib';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const require = createRequire(import.meta.url)
 
 let pkgVersion = '';
 let pkgName = '';
@@ -27,7 +29,8 @@ const getLatestVersion = async () => {
 };
 
 async function start() {
-  // 加载commands从 `./soon.config.t/js`
+  debug('loaded from', require.resolve('soon-cli'))
+
   const commandsPath = (await (
     (
       await import('./soon.config.js')
