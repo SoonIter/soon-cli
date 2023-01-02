@@ -1,5 +1,7 @@
 # soon-cli
 
+A small cli to record my commonly used scripts.
+
 ## start
 
 ```shell
@@ -52,9 +54,9 @@ export * from './createMotionTransform/index';
 
 config the githook in one click
 
-· `pnpm install -D simple-git-hooks lint-staged @commitlint/cli @commitlint/config-conventional`
-· generate `.commitlintrc`
-· add `prepare` script and "simple-git-hooks" and "lint-staged" to `package.json`
+- `pnpm install -D simple-git-hooks lint-staged @commitlint/cli @commitlint/config-conventional`
+- generate `.commitlintrc`
+- add `prepare` script and "simple-git-hooks" and "lint-staged" to `package.json`
 
 ### My Owesome Templates
 

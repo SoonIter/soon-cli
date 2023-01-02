@@ -2,7 +2,7 @@
   "name": "soon-cli",
   "version": "1.1.22",
   "packageManager": "pnpm@7.5.0",
-  "description": "自用的库模版",
+  "description": "常用的多个脚本混合的cli",
   "author": {
     "name": "SoonIter",
     "email": "sooniter@gmail.com"
