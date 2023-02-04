@@ -6,7 +6,6 @@ import { hideBin } from 'yargs/helpers';
 import { chalk, debug, getLatestVersion, getPkgInfo } from '~lib';
 import config from '~config';
 
-console.log(111);
 const yargs = createYargs(hideBin(process.argv));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
