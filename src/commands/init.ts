@@ -1,32 +1,34 @@
 import path from 'path';
-import inquirer from 'inquirer';
+import type { Choice } from 'prompts';
+import prompts from 'prompts';
 import { replaceStringInFiles } from 'tiny-replace-files';
 import config from '../config';
 import {
   chalk,
-  cwd,
   debug,
   execa,
   fail,
   fs,
   info,
-  startSpinner,
   success,
   warn,
+  withSpinner,
 } from '../lib/index';
 
 // 检查是否已经存在相同名字工程
 const checkProjectExist = async (targetDir: string) => {
   if (fs.existsSync(targetDir)) {
-    const answer = await inquirer.prompt({
-      type: 'list',
-      name: 'checkExist',
-      message: `\n仓库路径${targetDir}已存在，请选择`,
-      choices: ['覆盖', '取消'],
+    const { answer } = await prompts({
+      type: 'select',
+      name: 'answer',
+      message: `仓库路径 ${targetDir} 已存在，请选择`,
+      choices: [{ title: '覆盖' }, { title: '取消' }],
     });
-    if (answer.checkExist === '覆盖') {
-      warn(`删除${targetDir}...`);
-      fs.removeSync(targetDir);
+    console.log(answer);
+    if (answer === 0) {
+      await withSpinner(async () => {
+        await fs.remove(targetDir);
+      }, { text: 'clear the directory...' })();
     }
     else {
       return true;
@@ -51,56 +53,55 @@ const askQuestions = async (projectName = 'my-new-app') => {
       name,
     };
   });
-  return (await inquirer.prompt([
-    {
-      type: 'input',
-      name: 'name',
-      message: `package name: (${projectName})`,
-      default: projectName,
+
+  const { chosenTemplate, projectName: textedProjectName = projectName } = await prompts([{
+    name: 'projectName',
+    type: 'text',
+    message: `package name: (${projectName})`,
+  }, {
+    name: 'chosenTemplate',
+    message: 'choose a template',
+    type: 'autocomplete',
+    choices: _templates.map(i => ({ title: getColoredText(i.name), value: i })),
+    async suggest(input: string, choices: Choice[]) {
+      if (input === '')
+        return choices;
+      return choices.filter(i => i.value.name.includes(input));
     },
-    {
-      type: 'autocomplete',
-      name: 'projectType',
-      message: '请选择项目模版',
-      choices: templates.map(i => getColoredText(i.name)),
-      data: templates.map(i => i.degit),
-    },
-  ])) as { name: string; projectType: string };
+  }]);
+  return {
+    name: textedProjectName,
+    chosenTemplate,
+  } as { name: string; chosenTemplate: ITemplate };
 };
 
 const cloneProject = async (
   targetDir: string,
   projectName: string,
-  projectInfo: { projectType: string },
+  degitUrl: string,
 ) => {
-  startSpinner(`正在创建项目 ${chalk.cyan(targetDir)}`);
-  // TODO: 这里上颜色的形式不太好，容易出bug
-  const degitUrl
-    = _templates
-      .slice()
-      .sort((a, b) => -a.name.length + b.name.length)
-      .find(i => projectInfo.projectType.includes(i.name))?.degit ?? 'none';
-  await execa('npx', ['degit', degitUrl, projectName]);
+  await withSpinner(async () => await execa('npx', ['degit', degitUrl, projectName]), {
+    text: `create the project in ${chalk.green(targetDir)}`,
+  })();
 };
 
-const handler = async (projectName = 'my-new-app', cmdArgs?: any) => {
+const handler = async ({ projectName = 'my-new-app' }) => {
   try {
-    // { name: 'hello', projectType: '\x1B[38;2;130;215;247m\x1B[1Solid + Monorepo\x1B[22m\x1B[39m' }
     const projectInfo = await askQuestions(projectName);
-    projectName = projectInfo.name ?? projectName;
 
     // 获取项目路径
     const targetDir = path.join(
-      (cmdArgs && cmdArgs.context) || cwd,
+      process.cwd(),
       projectName,
     );
+
     if (await checkProjectExist(targetDir)) {
       warn('此路径已存在');
       return;
     }
 
     // clone仓库
-    await cloneProject(targetDir, projectName, projectInfo);
+    await cloneProject(targetDir, projectName, projectInfo.chosenTemplate.degit);
 
     // 替换[name]
     const options = {

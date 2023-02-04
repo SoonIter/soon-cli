@@ -1,12 +1,14 @@
-import { join } from 'path';
-import { execSync } from 'child_process';
+import { join, resolve } from 'path';
 import fg from 'fast-glob';
-import { chalk, cwd, fs, success } from '~lib';
+import type { CommandModule } from 'yargs';
+import { exists } from 'fs-extra';
+import { cwd as CWD, chalk, execa, fail, fs, success } from '~lib';
 
+const dependencies: string[] = ['simple-git-hooks', 'lint-staged', '@commitlint/cli', '@commitlint/config-conventional', 'eslint'];
 const config = JSON.parse(`{ 
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged",
-    "commit-msg": "npx commitlint -e $HUSKY_GIT_PARAMS"
+    "pre-commit": "./node_modules/.bin/lint-staged",
+    "commit-msg": "./node_modules/.bin/commitlint -e $HUSKY_GIT_PARAMS"
   },
   "lint-staged": {
     "*.{js,ts,tsx,vue,md}": [
@@ -15,38 +17,40 @@ const config = JSON.parse(`{
   }
 }`);
 
-const handler = async () => {
-  const res = fs.existsSync('./package.json');
+const handler = async (args: { path: string }) => {
+  const { path } = args;
+  const cwd = resolve(CWD, path);
+  const packageJsonPath = join(cwd, './package.json');
 
-  if (!res) {
-    console.log(chalk.red('没有package.json，请检查目录'));
+  if (!await exists(packageJsonPath)) {
+    fail(`Please make sure that the package.json exists at ${packageJsonPath}`);
     return;
   }
 
-  const packageJsonUrl = join(cwd, './package.json');
-  const packageJson = fs.readFileSync(packageJsonUrl, 'utf8');
-  console.log('修改的项目：', chalk.green(packageJsonUrl));
-
   try {
-    const packageJsonObj = JSON.parse(packageJson);
-    const dependencies: string[] = ['simple-git-hooks', 'lint-staged', '@commitlint/cli', '@commitlint/config-conventional', 'eslint'];
+    const packageJsonRaw = await fs.readFile(packageJsonPath, 'utf8');
+    console.log('loaded from ', chalk.green(packageJsonPath));
+
+    const packageJsonObj = JSON.parse(packageJsonRaw);
+
     for (const attr in config) {
       if (!packageJsonObj[attr])
         packageJsonObj[attr] = config[attr];
     }
+
     if (!packageJsonObj.scripts)
       packageJsonObj.scripts = {};
 
     Object.assign(packageJsonObj.scripts, { prepare: 'simple-git-hooks' });
-    fs.writeFileSync(packageJsonUrl, JSON.stringify(packageJsonObj, undefined, 2));
+    await fs.writeFile(packageJsonPath, JSON.stringify(packageJsonObj, undefined, 2));
 
-    const haveCommitlint = await fg('./*commitlint*');
+    const haveCommitlint = await fg('./*commitlint*', { dot: true, cwd });
     if (haveCommitlint.length === 0)
-      fs.writeFileSync('.commitlintrc', '{ extends: [\'@commitlint/config-conventional\'] };');
+      await fs.writeFile(join(cwd, '.commitlintrc'), '{ \"extends\": [\"@commitlint/config-conventional\"] }');
 
-    const commandRunning = `pnpm install -Dw ${dependencies.join(' ')}`;
+    const commandRunning = `pnpm add -Dw ${dependencies.join(' ')}`;
     console.log(chalk.yellow(commandRunning));
-    execSync(commandRunning, { stdio: 'inherit' });
+    await execa(commandRunning, { stdio: 'inherit' });
 
     success('添加完成');
   }
@@ -57,6 +61,15 @@ const handler = async () => {
 
 export default {
   command: 'githook',
-  desc: '自动配置simple-git-hooks',
-  handler,
-};
+  describe: 'automatically config the simple-git-hooks',
+  builder: {
+    path: {
+      description: 'the directory of package.json that add simple-git-hook',
+      required: false,
+      alias: 'p',
+      default: '.',
+      string: true,
+    },
+  },
+  handler: handler as any,
+} satisfies CommandModule;

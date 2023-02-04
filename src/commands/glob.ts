@@ -1,31 +1,46 @@
+import { writeFileSync } from 'fs';
+import { relative } from 'path';
+import type { CommandModule } from 'yargs';
 import fg from 'fast-glob';
-// import { program } from 'commander';
-import { fail, fs, success } from '../lib';
+import { fail, success, withSpinner } from '../lib';
+interface Args { path: string; ts: boolean;importFrom: string[] }
 
-const exec = async (pathArg: string | string[]) => {
-  const pathArgs = Array.isArray(pathArg) ? pathArg : [pathArg];
-  const entries = await fg(pathArgs, { dot: true });
-  const exportsArr = entries.reduce((arr, pathItem) => {
-    arr.push(`export * from '${pathItem.replace(/\.tsx?$/, '')}';`);
-    return arr;
+const REG = /\.c?[tj]sx?$/;
+export const getExportEntries = (paths: string[], indexPath: string) => {
+  const entries = paths.filter(pathItem => REG.test(pathItem)).map((pathItem) => {
+    return relative(indexPath, pathItem).replace(REG, '');
+  }).reduce((prev, curr) => {
+    if (curr === 'index')
+      return prev;
+    if (prev.includes(curr))
+      return prev;
+    if (curr.startsWith('/'))
+      return prev;
+    if (/[a-z]/.test(curr[0]))
+      curr = `./${curr}`;
+    prev.push(curr);
+    return prev;
   }, [] as string[]);
-  fs.writeFile(
-    './index.ts',
-    exportsArr.join('\n'),
+  return entries;
+};
+
+export const generateIndexFile = async ({ path: indexPath, ts, importFrom }: Args) => {
+  console.log(indexPath, ts, importFrom);
+  const entries = getExportEntries(await fg(importFrom, { dot: true }), indexPath);
+  const exportsRaw = entries.map((pathItem) => {
+    return `export * from '${pathItem}';`;
+  }).join('\n');
+  writeFileSync(
+    `./index.${ts ? 't' : 'j'}s`,
+    exportsRaw,
     {
       flag: 'w',
     },
-    (err) => {
-      err && console.log(err);
-    },
   );
 };
-const handler = () => {
-  const pathArgs = process.argv
-    .filter(s => s !== 'glob')
-    .map(s => s.replace('"', ''));
+const handler = async (args: Args) => {
   try {
-    exec(pathArgs);
+    await withSpinner(generateIndexFile, { text: 'generating the index file' })(args);
     success('创建index.ts成功');
   }
   catch (err) {
@@ -36,7 +51,23 @@ const handler = () => {
 };
 
 export default {
-  command: 'glob [path1] [path2]',
-  desc: '自动生成 export * from [path]',
-  handler,
-};
+  command: 'glob [importFrom ...]',
+  describe: 'generate export * from [importFrom] automatically',
+  builder: {
+    path: {
+      description: 'the index.ts directory',
+      required: false,
+      alias: 'p',
+      default: '.',
+      string: true,
+    },
+    typescript: {
+      description: 'the index.ts path',
+      required: false,
+      alias: 'ts',
+      default: true,
+      boolean: true,
+    },
+  },
+  handler: handler as any,
+} satisfies CommandModule;

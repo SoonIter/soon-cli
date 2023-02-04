@@ -2,32 +2,36 @@
 import { dirname } from 'path';
 import { fileURLToPath } from 'node:url';
 import createYargs from 'yargs';
-import { chalk, debug, getLatestVersion, getPkgInfo, info } from '~lib';
+import { hideBin } from 'yargs/helpers';
+import { chalk, debug, getLatestVersion, getPkgInfo } from '~lib';
 import config from '~config';
 
-const yargs = createYargs(process.argv.slice(2));
+console.log(111);
+const yargs = createYargs(hideBin(process.argv));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 async function main() {
   debug('loaded from', __dirname);
-
   const { commands } = config;
 
-  yargs.command('$0', 'the default command', () => { }, async () => {
-    console.log('this command will be run by default');
+  yargs.scriptName('soon');
+  yargs.command('$0', 'the default command', (yargsInstance) => {
+  }, async () => {
+    console.log(`loaded from ${__dirname}`);
     const pkgInfo = getPkgInfo();
     const pkgName = pkgInfo.name;
     const pkgVersion = pkgInfo.version;
     const latestVersion = await getLatestVersion(pkgName);
     if (latestVersion !== pkgVersion) {
-      info(
-        `可更新版本，${chalk.green(pkgVersion)} -> ${chalk.green(
+      console.log(
+        `Latest version available: ${chalk.green(pkgVersion)} -> ${chalk.green(
           latestVersion,
-        )} \n执行npm i -g ${pkgName}`,
+        )} \nExecute this to update: ${chalk.cyan(`npm install -g ${pkgName}`)}`,
       );
     }
   });
+  yargs.showHelpOnFail(false);
   commands.forEach((commandObj) => {
     yargs.command(commandObj as any);
   });
