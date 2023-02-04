@@ -66,7 +66,9 @@ const askQuestions = async (projectName = 'my-new-app') => {
     async suggest(input: string, choices: Choice[]) {
       if (input === '')
         return choices;
-      return choices.filter(i => i.value.name.includes(input));
+      return choices.filter((i) => {
+        return (i.value.name as string).toLowerCase().includes(input.toLowerCase());
+      });
     },
   }]);
   return {
