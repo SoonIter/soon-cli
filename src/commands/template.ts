@@ -1,10 +1,10 @@
 import path from 'path';
 import inquirer from 'inquirer';
-import { replaceDirText } from '../lib/copy/replaceDirText';
-import { cwd, failSpinner, fs, startSpinner, warn } from '../lib/index';
+import { replaceStringInFiles } from 'tiny-replace-files';
+import { cwd, fail, fs, startSpinner, warn } from '../lib/index';
 const { existsSync } = fs;
 
-const action = async (folderName: string, cmdArgs?: any) => {
+const handler = async (folderName: string, cmdArgs?: any) => {
   try {
     // 获取项目路径
     const currDir = (cmdArgs && cmdArgs.context) || cwd;
@@ -23,9 +23,10 @@ const action = async (folderName: string, cmdArgs?: any) => {
         if (!yes)
           return false;
       }
-      await replaceDirText('./template', targetDir, {
-        matchText: '[name]',
-        replaceText: folderName,
+      await replaceStringInFiles({
+        files: './template.ts/**',
+        from: '[name]',
+        to: folderName,
       });
     }
     else {
@@ -34,13 +35,12 @@ const action = async (folderName: string, cmdArgs?: any) => {
   }
   catch (err) {
     const e = err as Error;
-    failSpinner(e.message);
+    fail(e.message);
   }
 };
 
 export default {
   command: 'template <dir-name>',
-  description: '复制一个文件夹模板，并更名',
-  optionList: [['--context <context>', '上下文路径']],
-  action,
-} as ICommand;
+  desc: '复制一个文件夹模板，并更名',
+  handler,
+};

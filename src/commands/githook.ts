@@ -1,7 +1,7 @@
 import { join } from 'path';
 import { execSync } from 'child_process';
 import fg from 'fast-glob';
-import { chalk, cwd, fs, success } from '../lib';
+import { chalk, cwd, fs, success } from '~lib';
 
 const config = JSON.parse(`{ 
   "simple-git-hooks": {
@@ -15,8 +15,8 @@ const config = JSON.parse(`{
   }
 }`);
 
-const action = async () => {
-  const res = fs.existsSync('./package.json')
+const handler = async () => {
+  const res = fs.existsSync('./package.json');
 
   if (!res) {
     console.log(chalk.red('没有package.json，请检查目录'));
@@ -45,7 +45,7 @@ const action = async () => {
       fs.writeFileSync('.commitlintrc', '{ extends: [\'@commitlint/config-conventional\'] };');
 
     const commandRunning = `pnpm install -Dw ${dependencies.join(' ')}`;
-    console.log(chalk.yellow(commandRunning))
+    console.log(chalk.yellow(commandRunning));
     execSync(commandRunning, { stdio: 'inherit' });
 
     success('添加完成');
@@ -53,11 +53,10 @@ const action = async () => {
   catch (e) {
     console.log(chalk.red(e));
   }
-}
+};
 
 export default {
   command: 'githook',
-  description: '自动配置simple-git-hooks',
-  optionList: [['--context <context>', '上下文路径']],
-  action,
-} as ICommand;
+  desc: '自动配置simple-git-hooks',
+  handler,
+};

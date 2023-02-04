@@ -3,7 +3,7 @@ import init from './commands/init';
 import template from './commands/template';
 import githook from './commands/githook';
 
-const soonConfig = {
+const config = {
   commands: [init, template, glob, githook],
   templates: [
     {
@@ -48,5 +48,6 @@ const soonConfig = {
     },
   ],
   templateColor: [] as const,
+
 };
-export default soonConfig;
+export default config;

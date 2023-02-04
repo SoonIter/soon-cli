@@ -1,16 +1,17 @@
-import chalk from 'chalk'
+import chalk from 'chalk';
 
-export const success = (text: string) => {
-  console.log(chalk.green(`\n${text}\n`))
-}
+export const success = (text?: string) => {
+  console.log(`🎉 ${chalk.green(`${text}\n`)}`);
+};
+
+export const fail = (text?: string) => {
+  console.log(`❌ ${chalk.red(`${text}\n`)}`);
+};
+
 export const warn = (text: string) => {
-  console.log(chalk.yellow(`\n${text}\n`))
-}
+  console.log(chalk.yellow(`${text}`));
+};
 
 export const info = (text: string) => {
-  console.log(chalk.cyan(`\n${text}\n`))
-}
-
-export const error = (text: string) => {
-  console.log(chalk.bgRed(`\n${text}\n`))
-}
+  console.log(chalk.cyan(`${text}`));
+};

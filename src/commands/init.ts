@@ -1,16 +1,17 @@
 import path from 'path';
 import inquirer from 'inquirer';
-import replaceStringInFiles from 'tiny-replace-files';
-import soonConfig from '../soon.config';
+import { replaceStringInFiles } from 'tiny-replace-files';
+import config from '../config';
 import {
   chalk,
   cwd,
+  debug,
   execa,
-  failSpinner,
+  fail,
   fs,
   info,
   startSpinner,
-  succeedSpiner,
+  success,
   warn,
 } from '../lib/index';
 
@@ -34,10 +35,10 @@ const checkProjectExist = async (targetDir: string) => {
   return false;
 };
 
-let _templates = soonConfig?.templates ?? ([] as ITemplate[]);
+let _templates = config?.templates ?? ([] as ITemplate[]);
 
-const getQuestions = async (projectName = 'my-new-app') => {
-  const templates = soonConfig.templates;
+const askQuestions = async (projectName = 'my-new-app') => {
+  const templates = config.templates;
   _templates = templates.map(({ degit, name }) => {
     // degit github:user/repo
     // degit git@github.com:user/repo
@@ -58,16 +59,20 @@ const getQuestions = async (projectName = 'my-new-app') => {
       default: projectName,
     },
     {
-      type: 'list',
+      type: 'autocomplete',
       name: 'projectType',
       message: '请选择项目模版',
-      choices: templates.map(i => getSpecialText(i.name)),
+      choices: templates.map(i => getColoredText(i.name)),
       data: templates.map(i => i.degit),
     },
   ])) as { name: string; projectType: string };
 };
 
-const cloneProject = async (targetDir, projectName, projectInfo) => {
+const cloneProject = async (
+  targetDir: string,
+  projectName: string,
+  projectInfo: { projectType: string },
+) => {
   startSpinner(`正在创建项目 ${chalk.cyan(targetDir)}`);
   // TODO: 这里上颜色的形式不太好，容易出bug
   const degitUrl
@@ -78,10 +83,10 @@ const cloneProject = async (targetDir, projectName, projectInfo) => {
   await execa('npx', ['degit', degitUrl, projectName]);
 };
 
-const action = async (projectName = 'my-new-app', cmdArgs?: any) => {
+const handler = async (projectName = 'my-new-app', cmdArgs?: any) => {
   try {
     // { name: 'hello', projectType: '\x1B[38;2;130;215;247m\x1B[1Solid + Monorepo\x1B[22m\x1B[39m' }
-    const projectInfo = await getQuestions(projectName);
+    const projectInfo = await askQuestions(projectName);
     projectName = projectInfo.name ?? projectName;
 
     // 获取项目路径
@@ -103,30 +108,25 @@ const action = async (projectName = 'my-new-app', cmdArgs?: any) => {
       from: /\[name\]/g,
       to: projectName,
     };
+    debug(options);
+
     await replaceStringInFiles(options);
-    succeedSpiner(
+    success(
       `项目创建完成 ${chalk.yellow(projectName)}\n👉 输入以下命令开始使用:`,
     );
 
-    info(`$ cd ./${projectName} \n$ ni or pnpm install\n`);
+    info(`$ cd ./${projectName} \n$ ni or pnpm install`);
   }
   catch (err) {
     const e = err as Error;
-    failSpinner(e.message);
+    fail(e.message);
   }
 };
 
-export default {
-  command: 'init [project-name]',
-  description: '创建一个项目',
-  optionList: [['--context <context>', '上下文路径']],
-  action,
-} as ICommand;
-
-function getSpecialText(templateName: string) {
+function getColoredText(templateName: string) {
   // 根据项目上色
   const m = [
-    ...soonConfig.templateColor,
+    ...config.templateColor,
     [/solid/i, chalk.hex('#4d71b3').bold],
     [/react/i, chalk.hex('#82d7f7').bold],
     [/svelte/i, chalk.hex('#eb5027').bold],
@@ -137,6 +137,12 @@ function getSpecialText(templateName: string) {
     [/vscode/i, chalk.hex('#4f88ea').bold],
   ] as const;
   const transformColor
-    = m.find(([reg]) => reg.test(templateName))?.[1] ?? ((str: string) => str);
+  = m.find(([reg]) => reg.test(templateName))?.[1] ?? ((str: string) => str);
   return transformColor(templateName);
 }
+
+export default {
+  command: 'init [project-name]',
+  desc: '创建一个项目',
+  handler,
+};

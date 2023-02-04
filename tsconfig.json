@@ -1,21 +1,15 @@
 {
   "compilerOptions": {
-    "types": [
-      "vitest/globals"
-    ],
-    
-    "declarationDir": "./dist",
-    "target": "ESNext",
-    "outDir": "./dist",
+    "types": ["vitest/globals"],
     "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "dist",
+    "target": "ESNext",
+    "outDir": "dist",
     "useDefineForClassFields": true,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -28,13 +22,10 @@
     "removeComments": true,
     "downlevelIteration": true,
     "noImplicitAny": false,
-    "noUnusedLocals": false
-  },
-  "include": [
-    "./src"
-  ],
-  "exclude": [
-    "dist",
-    "node_modules",
-  ]
+    "noUnusedLocals": false,
+    "paths": {
+      "~lib": ["./src/lib/index.ts"],
+      "~config": ["./src/config.ts"]
+    }
+  }
 }
