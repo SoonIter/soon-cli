@@ -55,7 +55,7 @@ const handler = async (args: { path: string }) => {
     success('添加完成');
   }
   catch (e) {
-    console.log(chalk.red(e));
+    fail(e instanceof Error ? e.message : 'error');
   }
 };
 

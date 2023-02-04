@@ -1,5 +1,5 @@
 import { writeFileSync } from 'fs';
-import { relative } from 'path';
+import { join, relative } from 'path';
 import type { CommandModule } from 'yargs';
 import fg from 'fast-glob';
 import { fail, success, withSpinner } from '../lib';
@@ -25,13 +25,12 @@ export const getExportEntries = (paths: string[], indexPath: string) => {
 };
 
 export const generateIndexFile = async ({ path: indexPath, ts, importFrom }: Args) => {
-  console.log(indexPath, ts, importFrom);
   const entries = getExportEntries(await fg(importFrom, { dot: true }), indexPath);
   const exportsRaw = entries.map((pathItem) => {
     return `export * from '${pathItem}';`;
   }).join('\n');
   writeFileSync(
-    `./index.${ts ? 't' : 'j'}s`,
+    join(indexPath, `./index.${ts ? 't' : 'j'}s`),
     exportsRaw,
     {
       flag: 'w',

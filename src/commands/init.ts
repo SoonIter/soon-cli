@@ -24,7 +24,7 @@ const checkProjectExist = async (targetDir: string) => {
       message: `仓库路径 ${targetDir} 已存在，请选择`,
       choices: [{ title: '覆盖' }, { title: '取消' }],
     });
-    console.log(answer);
+    debug(answer);
     if (answer === 0) {
       await withSpinner(async () => {
         await fs.remove(targetDir);
