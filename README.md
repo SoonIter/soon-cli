@@ -58,7 +58,7 @@ config the githook in one click
 - generate `.commitlintrc`
 - add `prepare` script and "simple-git-hooks" and "lint-staged" to `package.json`
 
-### My Owesome Templates
+### My Awesome Templates
 
 - [sooniter-lib-template-monorepo](https://github.com/SoonIter/sooniter-lib-template-monorepo) - my template of monorepo project with pnpm and vitest
 - [sooniter-lib-template](https://github.com/SoonIter/sooniter-lib-template) - my template to create npm libraries with vitest
